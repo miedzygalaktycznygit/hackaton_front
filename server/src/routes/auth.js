@@ -4,7 +4,19 @@ const { body, validationResult } = require('express-validator');
 
 const { SignUp, SignIn } = require('../controllers/auth.controller');
 
-router.post('/signup',SignUp);
+router.post('/signup',[ 
+        body('email').isEmail(),
+        body('password').isLength({ min: 6 }),
+        (req, res, next) => {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            next();
+        }
+    ],
+    SignUp
+);
 router.post('/signin', SignIn);
 
 module.exports = router;
