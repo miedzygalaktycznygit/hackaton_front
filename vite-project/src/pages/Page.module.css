@@ -1,0 +1,29 @@
+.formWrapper {
+  width: 100%;
+  max-width: 40rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.title {
+  text-align: center;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+.link a {
+  color: #007bff;
+  text-decoration: none;
+}
+.link a:hover {
+  text-decoration: underline;
+}

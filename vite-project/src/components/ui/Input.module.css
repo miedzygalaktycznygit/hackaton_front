@@ -1,0 +1,31 @@
+.wrap{
+    width: 100%;
+}
+
+.label{
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.input{
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    background-color: aliceblue;
+    color: black;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.error{
+    color: red;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}
