@@ -2,9 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const pool = require('./database/db');
+const authRoutes = require('./routes/auth');
+
+const initDb = require('./database/initDb');
+
+initDb();
 
 app.use(express.json());
-
+app.use('/auth',authRoutes);
 
 
 const corsOptions = {
