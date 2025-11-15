@@ -7,6 +7,7 @@ const dashboardRoutes = require('./routes/dashBoard.router');
 
 const corsOptions = {
     origin: 'http://localhost:5173', 
+    credentials: true
 }
 
 const initDb = require('./database/initDb');
