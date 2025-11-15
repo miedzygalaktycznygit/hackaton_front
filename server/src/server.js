@@ -18,6 +18,7 @@ const initDb = require('./database/initDb');
 initDb();
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 app.use('/dashboard',dashboardRoutes);
 app.use('/auth',authRoutes);
 
