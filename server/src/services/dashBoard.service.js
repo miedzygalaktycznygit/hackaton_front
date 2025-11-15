@@ -11,12 +11,24 @@ async function addImg(user_id, imgUrl) {
     }
 }
 
-async function addSharedImg(shared_to_user_id, image_id) {
+async function addSharedImgByEmail(email, image_id) {
     try {
+        const userResult = await pool.query(
+            'SELECT id FROM users WHERE email = $1;',
+            [email]
+        );
+
+        if (userResult.rows.length === 0) {
+            throw new Error('User not found');
+        }
+
+        const shared_to_user_id = userResult.rows[0].id;
+
         const result = await pool.query(
             'INSERT INTO shared_images (shared_to_user_id, image_id) VALUES ($1, $2) RETURNING *;',
             [shared_to_user_id, image_id]
         );
+
         return result.rows[0];
     } catch (err) {
         throw err;
@@ -43,4 +55,4 @@ async function getImagesByUserId(user_id) {
 
 
 
-module.exports = { addImg, getImagesByUserId, getSharedImagesByUserId, addSharedImg};
+module.exports = { addImg, getImagesByUserId, getSharedImagesByUserId, addSharedImgByEmail};

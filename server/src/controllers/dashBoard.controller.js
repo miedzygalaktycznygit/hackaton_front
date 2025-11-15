@@ -1,6 +1,6 @@
 const { fileTypeFromBuffer } = require('file-type');
 const fs = require('fs').promises;
-const { addImg ,addSharedImg} = require('../services/dashBoard.service');
+const { addImg ,addSharedImgByEmail} = require('../services/dashBoard.service');
 const { getImagesByUserId, getSharedImagesByUserId } = require('../services/dashBoard.service');
 
 async function processFileUpload(req, res) {
@@ -40,13 +40,13 @@ async function processFileUpload(req, res) {
 
 async function postSharedImage(req, res) {
     try {
-        const { shared_to_user_id, image_id } = req.body;
+        const { email, image_id } = req.body;
 
-        if (!shared_to_user_id || !image_id) {
+        if (!email || !image_id) {
             return res.status(400).json({ message: "Missing shared_to_user_id or image_id" });
         }
 
-        const shared = await addSharedImg(shared_to_user_id, image_id);
+        const shared = await addSharedImgByEmail(email, image_id);
 
         res.status(200).json({ message: "Image shared successfully", shared });
     } catch (error) {
