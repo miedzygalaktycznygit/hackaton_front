@@ -1,57 +1,98 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
-import { getMyPhotos } from '../api/photosApi';
+import { getMyPhotos, getSharedImages } from '../api/photosApi';
 import { PhotoCard } from '../components/PhotoCard';
+import { ShareModal } from '../components/ShareModal';
 import styles from './DashboardPage.module.css';
 import { Link } from "react-router-dom";
+import { useState } from 'react';
+
 
 export function DashboardPage() {
-    const { logout, user } = useAuth();
+    const { logout, user, isAuthenticated } = useAuth();
     
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPhotoId, setSelectedPhotoId] = useState<number | null>(null);
+
     const { 
-      data: photos,
-      isLoading,
-      isError,
-      error
+      data: myPhotos, 
+      isLoading: isLoadingMyPhotos, 
+      isError: isErrorMyPhotos, 
+      error: errorMyPhotos, 
     } = useQuery({
       queryKey: ['myPhotos'],
       queryFn: getMyPhotos,
       retry: 1,
+      enabled: isAuthenticated,
       onError: (err: any) => {
         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
           console.error("Sesja wygasła, wylogowywanie...", err);
-          setTimeout(() => {
-            logout();
-          }, 2000);
+          setTimeout(() => logout(), 2000);
         }
       }
     });
 
-    const renderGalleryContent = () => {
-      if (isLoading) {
+    const { 
+      data: sharedPhotos, 
+      isLoading: isLoadingSharedPhotos 
+    } = useQuery({
+      queryKey: ['sharedPhotos'],
+      queryFn: getSharedImages,
+      retry: 1,
+      enabled: isAuthenticated,
+    });
+
+    const handleShareClick = (photoId: number) => {
+        setSelectedPhotoId(photoId);
+        setIsModalOpen(true);
+    };
+
+    const renderMyGallery = () => {
+      if (isLoadingMyPhotos || !isAuthenticated) {
           return <div>Ładowanie Twoich zdjęć...</div>;
       }
-
-      if (isError) {
-          if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      if (isErrorMyPhotos) {
+          if ((errorMyPhotos as any).response && ((errorMyPhotos as any).response.status === 401 || (errorMyPhotos as any).response.status === 403)) {
             return <div style={{ color: 'red' }}>Twoja sesja wygasła. Za chwilę zostaniesz wylogowany...</div>;
           }
           return <div style={{ color: 'red' }}>Nie udało się załadować galerii zdjęć.</div>;
       }
-      console.log('Dane z useQuery (photos):', photos);
-      if (photos && photos.length > 0) {
+      if (myPhotos && (myPhotos as any).length > 0) {
           return (
             <div className={styles.galleryGrid}>
-              {photos.map(photo => (
-                <PhotoCard key={photo.id} photo={photo} />
+              {(myPhotos as any).map(photo => (
+                <PhotoCard 
+                    key={photo.id} 
+                    photo={photo} 
+                    onShareClick={handleShareClick}
+                />
               ))}
             </div>
           );
       }
-      return (
-          <p>Nie masz jeszcze żadnych zdjęć. Czas coś przesłać!</p>
-      );
+      return <p>Nie masz jeszcze żadnych zdjęć. Czas coś przesłać!</p>;
     };
+
+    const renderSharedGallery = () => {
+        if (isLoadingSharedPhotos || !isAuthenticated) {
+            return <div>Ładowanie udostępnionych zdjęć...</div>;
+        }
+        if (sharedPhotos && sharedPhotos.length > 0) {
+            return (
+                <div className={styles.galleryGrid}>
+                    {sharedPhotos.map(photo => (
+                        <PhotoCard 
+                            key={photo.id} 
+                            photo={photo} 
+                            isSharedView={true}
+                        />
+                    ))}
+                </div>
+            );
+        }
+        return null; 
+    };
+
     return (
         <div className={styles.dashboardWrapper}>
             <header className={styles.header}>
@@ -67,9 +108,17 @@ export function DashboardPage() {
             </header>
             
             <h2>Twoja galeria</h2>
+            {renderMyGallery()}
             
-            {renderGalleryContent()}
+            <h2 className={styles.sharedHeader}>Udostępnione dla mnie</h2>
+            {renderSharedGallery()}
 
+            {isModalOpen && selectedPhotoId && (
+                <ShareModal 
+                    photoId={selectedPhotoId}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            )}
         </div>
     );
 }

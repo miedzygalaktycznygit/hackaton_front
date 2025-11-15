@@ -25,10 +25,6 @@
 .galleryGrid {
   display: flex;
   flex-wrap: wrap;
-  
-  /* display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem; */
 }
 
 .uploadButton {
@@ -44,4 +40,10 @@
 }
 .uploadButton:hover {
   background-color: #0056b3;
+}
+
+.sharedHeader {
+    margin-top: 2.5rem;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
 }
