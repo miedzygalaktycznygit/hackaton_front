@@ -19,7 +19,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     useEffect(() => {
         if (token) {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            localStorage.setItem('authToken', JSON.stringify(token));
+            localStorage.setItem('authToken', token);
         } else {
             delete api.defaults.headers.common['Authorization'];
             localStorage.removeItem('authToken');
