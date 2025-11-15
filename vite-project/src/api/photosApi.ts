@@ -7,13 +7,13 @@ export interface Photo {
 }
 
 export const getMyPhotos = async (): Promise<Photo[]> => {
-    const response = await api.get('/dashboard/uploads');
-    return response.data.ImgUrl;
+    const response = await api.get('/dashboard/images');
+    return response.data.images;
 };
 
 export const uploadPhoto = async (file: File) => {
   const formData = new FormData();
-  formData.append('photoFile', file); 
+  formData.append('image', file); 
   const response = await api.post('/dashboard/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

@@ -1,4 +1,3 @@
-// src/pages/DashboardPage.tsx
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
 import { getMyPhotos } from '../api/photosApi';
@@ -39,7 +38,7 @@ export function DashboardPage() {
           }
           return <div style={{ color: 'red' }}>Nie udało się załadować galerii zdjęć.</div>;
       }
-
+      console.log('Dane z useQuery (photos):', photos);
       if (photos && photos.length > 0) {
           return (
             <div className={styles.galleryGrid}>
