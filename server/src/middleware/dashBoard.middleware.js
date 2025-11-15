@@ -3,15 +3,15 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: 'uploads/',
-    filename: (req, file, cb) => {
+    filename: (req, img, cb) => {
         const uniqueName = Date.now() + '-' + Math.random().toString(36).substring(7);
-        cb(null, uniqueName + path.extname(file.originalname));
+        cb(null, uniqueName + path.extname(img.originalname));
     }
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req, img, cb) => {
     const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (allowedMimes.includes(file.mimetype)) {
+    if (allowedMimes.includes(img.mimetype)) {
         cb(null, true);
     } else {
         cb(new Error('Only JPEG, PNG, WebP allowed'), false);

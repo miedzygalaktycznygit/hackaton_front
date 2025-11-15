@@ -8,7 +8,7 @@ router.get('/', authenticateToken, (req, res) => {
     res.status(200).json({ message: `Welcome to the dashboard, ${req.user.email}!` });
 });
 
-router.post("/upload", dashBoardMiddleware,processFileUpload)
+router.post("/upload", authenticateToken, dashBoardMiddleware, processFileUpload)
     
 module.exports = router;
 

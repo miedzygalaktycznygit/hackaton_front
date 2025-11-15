@@ -1,5 +1,6 @@
 const { fileTypeFromBuffer } = require('file-type');
 const fs = require('fs').promises;
+const { addImg } = require('../services/dashBoard.service');
 
 async function processFileUpload(req, res) {
     try {
@@ -15,6 +16,13 @@ async function processFileUpload(req, res) {
             return res.status(400).json({ message: "Invalid file type" });
         }
 
+        if (!req.user || !req.user.id) {
+            await fs.unlink(req.file.path).catch(() => {});
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        await addImg(req.user.id, req.file.filename);
+        
         res.status(200).json({
             message: "File uploaded successfully",
             filename: req.file.filename,
