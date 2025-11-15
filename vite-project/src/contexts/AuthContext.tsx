@@ -1,6 +1,6 @@
 import React, {createContext, useState, useContext, useEffect, use} from "react";
-import axios from "axios";
-
+//import axios from "axios";
+import api from '../lib/axiosInstance';
 
 interface AuthContextType {
     token: string | null;
@@ -18,10 +18,10 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 
     useEffect(() => {
         if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            localStorage.setItem('authToken', token);
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            localStorage.setItem('authToken', JSON.stringify(token));
         } else {
-            delete axios.defaults.headers.common['Authorization'];
+            delete api.defaults.headers.common['Authorization'];
             localStorage.removeItem('authToken');
         }
 }, [token]);

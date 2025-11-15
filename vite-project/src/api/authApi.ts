@@ -5,7 +5,7 @@ import type { LoginFormData, RegisterFormData } from '../lib/validation';
 export const loginUser = async (data: LoginFormData) => {
     //axios.post('/api/login', data);
     const response = await api.post('/auth/signin', data);
-    return response.data;
+    return response.data.token;
 };
 
 export const registerUser = async (data: RegisterFormData) => {
