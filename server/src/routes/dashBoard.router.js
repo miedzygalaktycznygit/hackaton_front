@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth.middleware');
-const { processFileUpload } = require('../controllers/dashBoard.controller');
 const { dashBoardMiddleware } = require("../middleware/dashBoard.middleware");
-const { getImages } = require('../controllers/dashBoard.controller');
+const { processFileUpload, getImages, getSharedImages,postSharedImage } = require('../controllers/dashBoard.controller');
 
 router.get('/', authenticateToken, (req, res) => {
     res.status(200).json({ message: `Welcome to the dashboard, ${req.user.email}!` });
 });
 
+router.post("/upload", authenticateToken, dashBoardMiddleware, processFileUpload);
 router.get('/images', authenticateToken, getImages);
+router.get('/sharedImages', authenticateToken, getSharedImages);
+router.post("/upload/shared", authenticateToken, postSharedImage);
 
-router.post("/upload", authenticateToken, dashBoardMiddleware, processFileUpload)
     
 module.exports = router;
 

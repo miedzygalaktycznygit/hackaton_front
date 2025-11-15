@@ -1,7 +1,7 @@
 const { fileTypeFromBuffer } = require('file-type');
 const fs = require('fs').promises;
-const { addImg } = require('../services/dashBoard.service');
-const { getImagesByUserId } = require('../services/dashBoard.service');
+const { addImg ,addSharedImg} = require('../services/dashBoard.service');
+const { getImagesByUserId, getSharedImagesByUserId } = require('../services/dashBoard.service');
 
 async function processFileUpload(req, res) {
     try {
@@ -38,9 +38,31 @@ async function processFileUpload(req, res) {
     }
 }
 
+async function postSharedImage(req, res) {
+    try {
+        const { shared_to_user_id, image_id } = req.body;
+
+        if (!shared_to_user_id || !image_id) {
+            return res.status(400).json({ message: "Missing shared_to_user_id or image_id" });
+        }
+
+        const shared = await addSharedImg(shared_to_user_id, image_id);
+
+        res.status(200).json({ message: "Image shared successfully", shared });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to share image" });
+    }
+}
+
+
+
 
 async function getImages(req, res) {
     try{ 
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
         const userId = req.user.id;
         const images = await getImagesByUserId(userId);
         res.status(200).json({ images });
@@ -50,4 +72,18 @@ async function getImages(req, res) {
     }
 }
 
-module.exports = { processFileUpload, getImages };
+async function getSharedImages(req, res) {
+    try{ 
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = req.user.id;
+        const images = await getSharedImagesByUserId(userId);
+        res.status(200).json({ images });
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+module.exports = { processFileUpload, getImages , getSharedImages, postSharedImage};
