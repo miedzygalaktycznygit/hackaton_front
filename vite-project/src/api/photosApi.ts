@@ -1,14 +1,14 @@
 import api from '../lib/axiosInstance';
 
 export interface Photo {
-    id: string;
-    filename: string;
-    url: string;
+    id: number;
+    user_id: number;
+    imgurl: string;
 }
 
 export const getMyPhotos = async (): Promise<Photo[]> => {
     const response = await api.get('/dashboard/images');
-    return response.data.images;
+    return response.data.images; 
 };
 
 export const uploadPhoto = async (file: File) => {
@@ -20,4 +20,20 @@ export const uploadPhoto = async (file: File) => {
     },
   });
   return response.data;
+};
+
+export const getSharedImages = async (): Promise<Photo[]> => {
+    // Ten adres jest poprawny (z prefiksem dashboard)
+    const response = await api.get('/dashboard/sharedImages');
+    return response.data.images; 
+};
+
+// === FUNKCJA DO POPRAWY ===
+export const sharePhoto = async ({ photoId, email }: { photoId: number; email: string }) => {
+    // Musimy wysłać 'image_id', a nie 'photoId'
+    const response = await api.post('/dashboard/upload/shared', { 
+        email: email, 
+        image_id: photoId // <--- TUTAJ JEST KLUCZOWA POPRAWKA
+    });
+    return response.data;
 };
