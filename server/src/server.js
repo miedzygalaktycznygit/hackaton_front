@@ -10,6 +10,8 @@ const corsOptions = {
     credentials: true
 }
 
+app.use(cors(corsOptions));
+
 const initDb = require('./database/initDb');
 
 initDb();
@@ -17,9 +19,6 @@ initDb();
 app.use(express.json());
 app.use('/dashboard',dashboardRoutes);
 app.use('/auth',authRoutes);
-
-
-app.use(cors(corsOptions));
 
 
 
