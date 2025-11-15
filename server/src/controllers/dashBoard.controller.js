@@ -42,6 +42,13 @@ async function postSharedImage(req, res) {
     try {
         const { email, image_id } = req.body;
 
+        const currentUserId = req.user.id;
+
+        if (userToShare.id === currentUserId) {
+            return res.status(400).json({ message: "You cannot share an image with yourself" });
+        }
+
+
         if (!email || !image_id) {
             return res.status(400).json({ message: "Missing shared_to_user_id or image_id" });
         }

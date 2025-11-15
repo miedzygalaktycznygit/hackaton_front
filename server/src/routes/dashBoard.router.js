@@ -12,6 +12,10 @@ router.post("/upload", authenticateToken, dashBoardMiddleware, processFileUpload
 router.get('/images', authenticateToken, getImages);
 router.get('/sharedImages', authenticateToken, getSharedImages);
 router.post("/upload/shared", authenticateToken, postSharedImage);
+router.get('/image/:filename', authenticateToken, (req, res) => {
+    const filepath = path.join(__dirname, '../../uploads', req.params.filename);
+    res.sendFile(filepath);
+});
 
     
 module.exports = router;
