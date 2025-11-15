@@ -9,7 +9,6 @@ async function SignUp(req, res) {
             return res.status(400).json({message: "Email and password are required"});
         }
 
-        
 
         if(await isEmailTaken(email)){
             return res.status(400).json({message: "Email is already taken"});
