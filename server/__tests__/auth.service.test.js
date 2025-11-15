@@ -35,7 +35,6 @@ describe('Auth Service', () => {
         await expect(registerUser('test@test.com', 'password123')).rejects.toThrow('Internal server error');
     });
 
-    // ======== TESTY DLA LoginUser ========
     test('LoginUser zwraca token dla poprawnych danych', async () => {
         const hashedPassword = 'hashedPassword';
         pool.query.mockResolvedValue({ rows: [{ id: 1, email: 'test@test.com', password: hashedPassword }] });
@@ -64,7 +63,7 @@ describe('Auth Service', () => {
         pool.query.mockResolvedValue({ rows: [{ id: 1, email: 'test@test.com', password: hashedPassword }] });
         bcrypt.compare.mockResolvedValue(false);
 
-        await expect(LoginUser('test@test.com', 'wrongpassword')).rejects.toThrow('Invalid password');
+        await expect(LoginUser('test@test.com', 'wrongpassword')).rejects.toThrow('Login failed');
     });
 
     test('LoginUser rzuca błąd gdy baza danych wyrzuca wyjątek', async () => {

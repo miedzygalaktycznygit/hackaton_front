@@ -9,8 +9,13 @@ const pool = new Pool({
     database: process.env.database // database name
 });
 
-pool.connect().then(() => {
+async function connectDb() {
+    await pool.connect();
     console.log("Connected to the database");
-})
+}
+
+if (require.main === module) {
+    connectDb();
+}
 
 module.exports = pool;

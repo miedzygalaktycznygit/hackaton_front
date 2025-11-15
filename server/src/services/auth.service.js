@@ -28,7 +28,7 @@ async function LoginUser(email, password){
 
             const user = userResult.rows[0];
 
-            if(userResult.rows.Length === 0){
+            if(!user || userResult.rows.length === 0){
                 return null;
             }
 
