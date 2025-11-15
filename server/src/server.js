@@ -4,6 +4,7 @@ const app = express();
 const pool = require('./database/db');
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashBoard.router');
+dotenv = require('dotenv').config();
 
 const corsOptions = {
     origin: 'http://localhost:5173', 
@@ -23,6 +24,6 @@ app.use('/auth',authRoutes);
 
 
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(parseInt(process.env.backend_port), () => {
+    console.log("Server is running on port ", process.env.backend_port);
 })

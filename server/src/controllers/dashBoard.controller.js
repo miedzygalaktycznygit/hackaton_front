@@ -1,6 +1,7 @@
 const { fileTypeFromBuffer } = require('file-type');
 const fs = require('fs').promises;
 const { addImg } = require('../services/dashBoard.service');
+const { getImagesByUserId } = require('../services/dashBoard.service');
 
 async function processFileUpload(req, res) {
     try {
@@ -38,4 +39,15 @@ async function processFileUpload(req, res) {
 }
 
 
-module.exports = { processFileUpload };
+async function getImages(req, res) {
+    try{ 
+        const userId = req.user.id;
+        const images = await getImagesByUserId(userId);
+        res.status(200).json({ images });
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+module.exports = { processFileUpload, getImages };

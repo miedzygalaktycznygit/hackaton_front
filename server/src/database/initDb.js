@@ -14,8 +14,7 @@ async function initDb() {
         // await pool.query(`CREATE TABLE IF NOT EXISTS shared_images (
         //     id SERIAL PRIMARY KEY,
         //     image_id INTEGER REFERENCES images(id) ON DELETE CASCADE,
-        //     shared_to_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        //     shared_by_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE);`)
+        //     shared_to_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE);`)
     }catch(err){
         console.error("Error initializing database:", err);
     }
