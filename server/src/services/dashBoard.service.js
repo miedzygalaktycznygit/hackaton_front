@@ -37,9 +37,15 @@ async function addSharedImgByEmail(email, image_id) {
 
 async function getSharedImagesByUserId(shared_to_user_id) {
     try {
-        const result = await pool.query('SELECT * FROM shared_images WHERE shared_to_user_id = $1;', [shared_to_user_id]);
+        const result = await pool.query(`
+            SELECT images.id, images.user_id, images.imgUrl
+            FROM shared_images
+            JOIN images ON shared_images.image_id = images.id
+            WHERE shared_images.shared_to_user_id = $1;`, 
+            [shared_to_user_id]);
+
         return result.rows;
-    }catch(err) {
+    } catch (err) {
         throw err;
     }
 }
