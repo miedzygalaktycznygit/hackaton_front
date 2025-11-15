@@ -7,16 +7,16 @@ import { AuthProvider } from './contexts/AuthContext.tsx';
 
 const queryClient = new QueryClient()
 
-async function mocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return
-  }
-  const {worker} = await import('./mocks/browser')
-  worker.start()
-}
+// async function mocking() {
+//   if (process.env.NODE_ENV !== 'development') {
+//     return
+//   }
+//   const {worker} = await import('./mocks/browser')
+//   worker.start()
+// }
 
 
-mocking().then(() => {
+// mocking().then(() => {
   ReactDom.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -26,4 +26,4 @@ mocking().then(() => {
       </QueryClientProvider>
     </React.StrictMode>
   )
-})
+// })

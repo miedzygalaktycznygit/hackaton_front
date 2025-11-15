@@ -27,9 +27,9 @@ export function LoginPage() {
  
   const mutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      console.log('Zalogowano!', data);
-      login(data.token); 
+    onSuccess: (tokenData) => {
+      console.log('Zalogowano!', tokenData);
+      login(tokenData); 
       navigate('/dashboard');
     },
     onError: (error) => {
