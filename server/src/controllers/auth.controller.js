@@ -1,6 +1,3 @@
-const pool = require('../database/db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { isEmailTaken } = require('../utils/validators');
 dotenv = require('dotenv').config();
 const { registerUser, LoginUser} = require('../services/auth.service');
@@ -38,14 +35,14 @@ async function SignIn(req, res){
             return res.status(400).json({message: "Email and password are required"});
         }
 
-        const data = await LoginUser(email,password);
+        const token = await LoginUser(email,password);
 
-        if(data === null){
+        if(token === null){
             return res.status(400).json({message: "Invalid email or password"});
         }
        
 
-        res.status(200).json({ message: "User logged in successfully", data });
+        res.status(200).json({ message: "User logged in successfully", token });
     }catch(err){
         console.error("Error during sign in:", err);
         res.status(500).json({message: "Internal server error"});
